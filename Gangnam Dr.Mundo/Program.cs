@@ -42,9 +42,12 @@ namespace Gangnam_Dr.Mundo
 
             Menu = MainMenu.AddMenu("Dr.Mundo", "Ten Percent Dr.Mundo".ToLower(),"Ten Percent Dr.Mundo");
             Menu.AddLabel("Gangnam");
-            Menu.AddLabel("Ten Percent Dr.Mundo Ver 0.0.0.9 (Beta)");
-            Menu.AddLabel("Last Update 2016.03.19");
+            Menu.AddLabel("Ten Percent Dr.Mundo Ver 0.0.0.91 (Beta)");
+            Menu.AddLabel("Last Update 2016.03.20");
             Menu.AddLabel("Plz give me Many FeedBack :)");
+            Menu.AddLabel("Change Log");
+            Menu.AddLabel("0.0.0.9  - Release");
+            Menu.AddLabel("0.0.0.91 - Auto Harass Added");
 
             CMenu = Menu.AddSubMenu("Combo", "CMenu");
             CMenu.Add("CQ", new CheckBox("Use Q"));
@@ -58,6 +61,7 @@ namespace Gangnam_Dr.Mundo
             HMenu.Add("HQ", new CheckBox("Use Q"));
             HMenu.Add("HW", new CheckBox("Use W"));
             HMenu.Add("HE", new CheckBox("Use E"));
+            HMenu.Add("HA", new CheckBox("Auto Harass Q", false));
             HMenu.AddSeparator();
 
             LCMenu = Menu.AddSubMenu("LaneClear", "LCMenu");
@@ -381,7 +385,6 @@ namespace Gangnam_Dr.Mundo
                         }
                     }
                 }
-
             }
             if (!(ObjectManager.Player.IsHealthPercentOkey(CMenu["CH"].Cast<Slider>().CurrentValue)))
             {
@@ -393,6 +396,23 @@ namespace Gangnam_Dr.Mundo
                         {
                             _r.Cast();
                         }
+                    }
+                }
+            }
+
+            if (HMenu["HA"].Cast<CheckBox>().CurrentValue)
+            {
+                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
+                    return;
+                }
+
+                if (_q.IsReady())
+                {
+                    var target = TargetSelector.GetTarget(_q.Range, DamageType.Magical);
+                    if (target.IsValidTarget(_q.Range))
+                    {
+                        _q.Cast(target);
                     }
                 }
             }
